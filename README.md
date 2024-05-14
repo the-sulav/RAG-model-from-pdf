@@ -1,10 +1,18 @@
 # LangChain Community - Document Analysis
 
 ## Overview
-This script demonstrates document analysis using LangChain, a toolkit for natural language processing tasks. Specifically, it loads a PDF document, splits it into smaller chunks, embeds those chunks into a vector database, and then uses a language model to answer questions based on the provided context.
+This repository showcases a Python script that illustrates document analysis using LangChain, an extensive toolkit designed for various natural language processing tasks. The script exemplifies the process of loading a PDF document, segmenting it into smaller portions, embedding these segments into a vector database, and utilizing a language model to generate responses to questions based on the provided context.
+
+By leveraging the capabilities of LangChain, users can gain insights into efficient and effective methods for processing textual data.
+
+It's important to note that this script represents an initial attempt at document analysis, and there may be limitations. The language model used in this example may not provide satisfactory answers to all questions, and the overall performance of the script may be slow, especially for large documents. Further optimizations and improvements can be explored to enhance the functionality and efficiency of the document analysis process.
+
+
+
 
 ## Requirements
-- Python 3.x
+- Download Ollama and also download "mistral" and "nomic-embed-text" model in ollama for the code to work
+- Python 3.10 ( ChromaDB didnot work in version >3.10 when i tried)
 - LangChain library
   - `langchain_community`
   - `langchain_core`
