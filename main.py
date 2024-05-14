@@ -11,9 +11,12 @@ from langchain_community.vectorstores import Chroma
 from langchain_community import embeddings
 
 
+#loading data from PDF
 
-loader = PyPDFLoader("kathmandupost.pdf")
+loader = PyPDFLoader("kathmandu_post.pdf")
 pages = loader.load_and_split()
+
+#splitting the pdf files into chunks because the embedding model is limited my token size
 
 text_splitter = RecursiveCharacterTextSplitter(
       chunk_size = 800,
@@ -23,26 +26,37 @@ text_splitter = RecursiveCharacterTextSplitter(
 
 chunks = text_splitter.split_documents(pages)
 
+#storing the embedings into a vector database for easy retrival
+#using ChromaDB
 vectorstore = Chroma.from_documents(
     documents = chunks,
     collection_name ="rag_chroma",
     embedding = embeddings.ollama.OllamaEmbeddings(model = "nomic-embed-text")
 )
 
+#instance of vector database
 retriever = vectorstore.as_retriever()
 
+#defining model also can use llama3 
+
 model_local = ChatOllama(model = "mistral")
+
+#template for LLM to answer questions
 
 after_rag_template = """Answer the question based on the following context:
 {context}
 Question : {question}
 """
 after_rag_prompt = ChatPromptTemplate.from_template(after_rag_template)
+
+# Defining pipeline
 after_rag_chain = (
     {"context": retriever, "question": RunnablePassthrough()}
     | after_rag_prompt
     | model_local
     | StrOutputParser()
 )
-print(after_rag_chain.invoke("compare between japanese yen and us dollars"))
+
+#The question you want to ask
+print(after_rag_chain.invoke("Explain about Women Empowerment in Nepalese Banks"))
 
